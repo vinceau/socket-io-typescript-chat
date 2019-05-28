@@ -9,6 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class DialogUserComponent implements OnInit {
   usernameFormControl = new FormControl('', [Validators.required]);
+  roomFormControl = new FormControl('', [Validators.required]);
   previousUsername: string;
 
   constructor(public dialogRef: MatDialogRef<DialogUserComponent>,
@@ -22,6 +23,7 @@ export class DialogUserComponent implements OnInit {
   public onSave(): void {
     this.dialogRef.close({
       username: this.params.username,
+      room: this.params.room,
       dialogType: this.params.dialogType,
       previousUsername: this.previousUsername
     });

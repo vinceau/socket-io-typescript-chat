@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       dialogType: DialogUserType.NEW
     }
   };
+  room: string;
 
   // getting a reference to the overall list, which is the parent container of the list items
   @ViewChild(MatList, { read: ElementRef }) matList: ElementRef;
@@ -73,8 +74,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private initIoConnection(): void {
-    this.socketService.initSocket();
+  private initIoConnection(room: string): void {
+    this.socketService.initSocket(room);
 
     this.ioConnection = this.socketService.onMessage()
       .subscribe((message: Message) => {
@@ -116,8 +117,9 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
       this.user.name = paramsDialog.username;
       if (paramsDialog.dialogType === DialogUserType.NEW) {
-        this.initIoConnection();
+        this.initIoConnection(paramsDialog.room);
         this.sendNotification(paramsDialog, Action.JOINED);
+        this.room = paramsDialog.room;
       } else if (paramsDialog.dialogType === DialogUserType.EDIT) {
         this.sendNotification(paramsDialog, Action.RENAME);
       }
@@ -131,7 +133,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
     this.socketService.send({
       from: this.user,
-      content: message
+      content: message,
+      room: this.room,
     });
     this.messageContent = null;
   }
@@ -142,17 +145,20 @@ export class ChatComponent implements OnInit, AfterViewInit {
     if (action === Action.JOINED) {
       message = {
         from: this.user,
-        action: action
+        action: action,
+        room: params.room,
       }
     } else if (action === Action.RENAME) {
       message = {
         action: action,
         content: {
           username: this.user.name,
-          previousUsername: params.previousUsername
+          previousUsername: params.previousUsername,
+          room: params.room,
         }
       };
     }
+
 
     this.socketService.send(message);
   }

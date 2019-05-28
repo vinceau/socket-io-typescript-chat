@@ -7,6 +7,12 @@
     <mat-error>This field is required</mat-error>
     <mat-hint>Please type your username</mat-hint>
   </mat-form-field>
+  <mat-form-field>
+    <input matInput name="room" placeholder="Room" 
+           [(ngModel)]="params.room" (keyup.enter)="onSave()" [formControl]="roomFormControl" required>
+    <mat-error>This field is required</mat-error>
+    <mat-hint>Enter a room</mat-hint>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions *ngIf="params?.typeDialog === 'new-user'" [attr.align]="'end'">

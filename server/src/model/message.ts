@@ -1,5 +1,7 @@
 import {User} from './user';
 
-export class Message {
-    constructor(private from: User, private content: string) {}
+export interface Message {
+    from: User;
+    action?: number;
+    room: string;
 }

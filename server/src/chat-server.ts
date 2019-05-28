@@ -11,6 +11,8 @@ export class ChatServer {
     private io: SocketIO.Server;
     private port: string | number;
 
+    private rooms: Map<string, Array<any>> = new Map<string, Array<any>>();
+
     constructor() {
         this.createApp();
         this.config();
@@ -41,10 +43,20 @@ export class ChatServer {
         });
 
         this.io.on('connect', (socket: any) => {
+            console.log(socket);
+            const room = socket.handshake.query.room;
+
+            socket.join(room)
             console.log('Connected client on port %s.', this.port);
+
             socket.on('message', (m: Message) => {
+                // const chat = this.io.of(`/room/${m.room}`);
                 console.log('[server](message): %s', JSON.stringify(m));
-                this.io.emit('message', m);
+                // this.io.emit('message', m);
+                // send to everyone but me
+                socket.to(room).emit('message', m);
+                // also send to me
+                socket.emit('message', m);
             });
 
             socket.on('disconnect', () => {
