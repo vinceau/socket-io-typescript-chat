@@ -6,6 +6,6 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "target": "es5",
-    "lib": ["es5", "es6", "dom"]
+    "lib": ["es5", "es6", "es7", "dom"]
   }
 }

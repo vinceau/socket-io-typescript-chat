@@ -12,8 +12,8 @@ const SERVER_URL = 'http://localhost:8080';
 export class SocketService {
     private socket;
 
-    public initSocket(room: string): void {
-        this.socket = socketIo(`${SERVER_URL}/?room=${room}`);
+    public initSocket(room: string, name: string): void {
+        this.socket = socketIo(`${SERVER_URL}/?room=${room}&name=${name}`);
     }
 
     public send(message: Message): void {

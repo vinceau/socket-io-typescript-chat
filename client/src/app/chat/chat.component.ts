@@ -32,6 +32,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
     }
   };
   room: string;
+  name: string;
 
   // getting a reference to the overall list, which is the parent container of the list items
   @ViewChild(MatList, { read: ElementRef }) matList: ElementRef;
@@ -74,8 +75,8 @@ export class ChatComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private initIoConnection(room: string): void {
-    this.socketService.initSocket(room);
+  private initIoConnection(room: string, name: string): void {
+    this.socketService.initSocket(room, name);
 
     this.ioConnection = this.socketService.onMessage()
       .subscribe((message: Message) => {
@@ -117,9 +118,10 @@ export class ChatComponent implements OnInit, AfterViewInit {
 
       this.user.name = paramsDialog.username;
       if (paramsDialog.dialogType === DialogUserType.NEW) {
-        this.initIoConnection(paramsDialog.room);
+        this.initIoConnection(paramsDialog.room, paramsDialog.username);
         this.sendNotification(paramsDialog, Action.JOINED);
         this.room = paramsDialog.room;
+        this.name = paramsDialog.name;
       } else if (paramsDialog.dialogType === DialogUserType.EDIT) {
         this.sendNotification(paramsDialog, Action.RENAME);
       }
