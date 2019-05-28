@@ -11,8 +11,6 @@ export class ChatServer {
     private io: SocketIO.Server;
     private port: string | number;
 
-    private rooms: Map<string, Array<any>> = new Map<string, Array<any>>();
-
     constructor() {
         this.createApp();
         this.config();
