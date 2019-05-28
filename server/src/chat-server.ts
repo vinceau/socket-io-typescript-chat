@@ -48,13 +48,10 @@ export class ChatServer {
             console.log('Connected client on port %s.', this.port);
 
             socket.on('message', (m: Message) => {
-                // const chat = this.io.of(`/room/${m.room}`);
                 console.log('[server](message): %s', JSON.stringify(m));
-                // this.io.emit('message', m);
-                // send to everyone but me
-                socket.to(room).emit('message', m);
-                // also send to me
-                socket.emit('message', m);
+
+                // send to everyone in the room including me
+                socket.nsp.to(room).emit('message', m);
             });
 
             socket.on('disconnect', () => {
