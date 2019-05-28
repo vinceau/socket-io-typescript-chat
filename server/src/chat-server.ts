@@ -42,7 +42,7 @@ export class ChatServer {
             console.log('Running server on port %s', this.port);
         });
 
-        this.io.on('connect', (socket: any) => {
+        this.io.on('connect', (socket: SocketIO.Socket) => {
             console.log(socket);
             const room = socket.handshake.query.room;
 
